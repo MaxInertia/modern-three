@@ -33,12 +33,15 @@
   "devDependencies": {
     "@tweakpane/core": "^1.1.1",
     "@tweakpane/plugin-essentials": "^0.1.5",
-    "@types/three": "^0.146.0",
+    "@types/three": "^0.156.0",
     "pathe": "^1.0.0",
-    "three": "^0.147.0",
+    "three": "^0.156.1",
     "tweakpane": "^3.1.1",
     "typescript": "^4.9.4",
-    "vite": "^4.0.1",
+    "vite": "^4.4.9",
     "vite-plugin-glsl": "^1.0.1"
+  },
+  "dependencies": {
+    "vite-plugin-gltf": "^3.1.0"
   }
 }

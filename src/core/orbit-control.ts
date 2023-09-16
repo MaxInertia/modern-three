@@ -1,6 +1,9 @@
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { camera } from './camera'
-import { renderer } from './renderer'
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'
+import {camera} from './camera'
+import {renderer} from './renderer'
 
 export const controls = new OrbitControls(camera, renderer.domElement)
 controls.enableDamping = true
+
+controls.maxZoom = 0
+controls.autoRotate = true

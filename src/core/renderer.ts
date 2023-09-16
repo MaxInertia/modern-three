@@ -1,17 +1,17 @@
 import {
-  WebGLRenderer,
-  Scene,
-  AxesHelper,
-  sRGBEncoding,
-  PCFShadowMap,
-  ACESFilmicToneMapping,
-  Color,
+	WebGLRenderer,
+	Scene,
+	AxesHelper,
+	sRGBEncoding,
+	PCFShadowMap,
+	ACESFilmicToneMapping,
+	Color,
 } from 'three'
-import { gui } from './gui'
+import {gui} from './gui'
 
 export const sizes = {
-  width: window.innerWidth,
-  height: window.innerHeight,
+	width: window.innerWidth,
+	height: window.innerHeight,
 }
 
 // Scene
@@ -22,14 +22,15 @@ const canvas: HTMLElement = document.querySelector('#webgl') as HTMLElement
 
 // Renderer
 export const renderer = new WebGLRenderer({
-  canvas,
-  antialias: true,
-  alpha: true,
+	canvas,
+	antialias: true,
+	alpha: true,
 })
 
 // More realistic shadows
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = PCFShadowMap
+// @ts-expect-error Not in the type defs
 renderer.physicallyCorrectLights = true
 renderer.outputEncoding = sRGBEncoding
 renderer.toneMapping = ACESFilmicToneMapping
@@ -40,23 +41,23 @@ const axesHelper = new AxesHelper()
 scene.add(axesHelper)
 
 gui.addInput(axesHelper, 'visible', {
-  label: 'AxesHelper',
+	label: 'AxesHelper',
 })
 
 function updateRenderer() {
-  renderer.setSize(sizes.width, sizes.height)
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)) // To avoid performance problems on devices with higher pixel ratio
+	renderer.setSize(sizes.width, sizes.height)
+	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)) // To avoid performance problems on devices with higher pixel ratio
 }
 
 window.addEventListener('resize', () => {
-  sizes.width = window.innerWidth
-  sizes.height = window.innerHeight
-  updateRenderer()
+	sizes.width = window.innerWidth
+	sizes.height = window.innerHeight
+	updateRenderer()
 })
 
 updateRenderer()
 
 export default {
-  renderer,
-  gui,
+	renderer,
+	gui,
 }
