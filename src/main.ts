@@ -3,16 +3,21 @@ import {renderer, scene} from './core/renderer'
 import {fpsGraph, gui} from './core/gui'
 import camera from './core/camera'
 import {controls} from './core/orbit-control'
+import "./space/controls"
 
 import './style.css'
 
 // Shaders
-import {DISTANCE_SCALE, DISTANCE_TO_MOON, loadPlanet} from "/@/space/planet";
+import {DISTANCE_SCALE, DISTANCE_TO_MOON} from "/@/space/planet";
 import {makeLineBetween} from "/@/utils";
+import {combineLatest} from "rxjs";
+import {earth$, moon$} from "/@/space/planets";
 
 const config = {
 	centerCameraOnMoon: false,
 }
+
+scene.background = new THREE.Color(0, 0, 0)
 
 // Lights
 {
@@ -47,9 +52,7 @@ const config = {
 }
 
 
-const earth$ = loadPlanet('earth')
-const moon$ = loadPlanet('moon')
-Promise.all([earth$, moon$]).then(([earth, moon]) => {
+combineLatest([earth$, moon$]).subscribe(([earth, moon]) => {
 	const dx = DISTANCE_TO_MOON * DISTANCE_SCALE
 	moon.position.set(earth.position.x + dx, earth.position.y, earth.position.z)
 
@@ -70,7 +73,7 @@ Promise.all([earth$, moon$]).then(([earth, moon]) => {
 	const line = makeLineBetween(earth.position, moon.position)
 	scene.add(line)
 
-	moonControls.addInput(line, "visible", {
+	gui.addInput(line, "visible", {
 		label: "Show line to moon"
 	})
 	moonControls.addInput(config, "centerCameraOnMoon", {

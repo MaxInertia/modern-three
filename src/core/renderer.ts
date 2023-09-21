@@ -1,11 +1,11 @@
 import {
 	WebGLRenderer,
 	Scene,
-	AxesHelper,
 	sRGBEncoding,
 	PCFShadowMap,
 	ACESFilmicToneMapping,
 	Color,
+	AxesHelper,
 } from 'three'
 import {gui} from './gui'
 
