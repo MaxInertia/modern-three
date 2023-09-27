@@ -1,12 +1,10 @@
-// @ts-ignore
+// @ts-expect-error missing type defs
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-// import {DRACOLoader} from "three/examples/jsm/loaders/DRACOLoader";
 import * as THREE from 'three'
 import {findSize} from "/@/utils";
 
 // Instantiate a loader
 const loader = new GLTFLoader();
-
 
 type BodyInSpace = 'earth' | 'moon'
 
@@ -41,14 +39,22 @@ export function loadPlanet(body: BodyInSpace) {
 			bodyToFilePath[body],
 			// called when the resource is loaded
 			function (gltf: GLTF) {
-				console.log("gltf:", gltf)
+				console.log(body + " gltf:", gltf)
 				const scale = bodyRadius[body] * MODEL_SCALE
 
 				// Set the relative size of the planet
 				// then put in a group so each scale starts off at 1 in the GUI
 				gltf.scene.scale.set(scale, scale, scale);
+				gltf.scene.castShadow = true
+				gltf.scene.receiveShadow = true
+				gltf.scene.traverse(function (node) {
+					node.castShadow = true;
+					node.receiveShadow = true;
+				});
 
 				const object = new THREE.Group()
+				object.castShadow = true
+				object.receiveShadow = true
 				// object.scale.set(scale, scale, scale);
 				object.add(gltf.scene)
 
@@ -61,8 +67,8 @@ export function loadPlanet(body: BodyInSpace) {
 				resolve(object)
 			},
 			// On Progress
-			function (xhr: any) {
-				console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+			function (_: { loaded: number, total: number }) {
+				// console.log((xhr.loaded / xhr.total * 100) + '% loaded');
 			},
 			// On Error
 			function (error: unknown) {
@@ -72,4 +78,3 @@ export function loadPlanet(body: BodyInSpace) {
 		);
 	})
 }
-

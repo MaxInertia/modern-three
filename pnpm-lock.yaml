@@ -14,11 +14,11 @@ dependencies:
 
 devDependencies:
   '@tweakpane/core':
-    specifier: ^1.1.1
-    version: 1.1.1
+    specifier: ^2.0.1
+    version: 2.0.1
   '@tweakpane/plugin-essentials':
-    specifier: ^0.1.5
-    version: 0.1.5(tweakpane@3.1.1)
+    specifier: ^0.2.0
+    version: 0.2.0(tweakpane@4.0.1)
   '@types/three':
     specifier: ^0.156.0
     version: 0.156.0
@@ -29,8 +29,8 @@ devDependencies:
     specifier: ^0.156.1
     version: 0.156.1
   tweakpane:
-    specifier: ^3.1.1
-    version: 3.1.1
+    specifier: ^4.0.1
+    version: 4.0.1
   typescript:
     specifier: ^4.9.4
     version: 4.9.4
@@ -280,16 +280,16 @@ packages:
       estree-walker: 2.0.2
       picomatch: 2.3.1
 
-  /@tweakpane/core@1.1.1:
-    resolution: {integrity: sha512-bCywfumcPHiaPLzskFrkB5+hw070UHwxPI45e04TmWW/iIyMwFSJlRvKtbN5cX8Xq1VZedxCgBFoJIici0OyKA==}
+  /@tweakpane/core@2.0.1:
+    resolution: {integrity: sha512-iJNrLrLffQR0I8mWgAWcMVO9ZPNdNeXZl66WNT+Op5L9FW7BSF6lwG3izR6Ki9CaI3HzIownwjzYS5xWUaokTA==}
     dev: true
 
-  /@tweakpane/plugin-essentials@0.1.5(tweakpane@3.1.1):
-    resolution: {integrity: sha512-dt+fwtUEVmBxsVhGNSqtY6dN3rOmxIt3zSA/cSFMs2eBbMrnBTSkJBe2JMXKodTTR6OOFihq6yxyRFqG5wsP3w==}
+  /@tweakpane/plugin-essentials@0.2.0(tweakpane@4.0.1):
+    resolution: {integrity: sha512-/kO90nfm0y0CYJPUvoNrjXhjNoqr+RaoySIdJmy++pb5vrSHi/DXdxG/sPszUPZggDY9M31RTacnxXi6Dv7r8Q==}
     peerDependencies:
-      tweakpane: ^3.1.0
+      tweakpane: ^4.0.0-beta.2
     dependencies:
-      tweakpane: 3.1.1
+      tweakpane: 4.0.1
     dev: true
 
   /@types/estree@1.0.0:
@@ -862,8 +862,8 @@ packages:
       safe-buffer: 5.2.1
     dev: false
 
-  /tweakpane@3.1.1:
-    resolution: {integrity: sha512-b9bpZSvG4KLtvSuyP3r20XWztdbzXleXO1RZN5pS4gcVAVesq0+mYz/bylYIckwh/VZjp3f3zUFJSeV2M3eRCw==}
+  /tweakpane@4.0.1:
+    resolution: {integrity: sha512-1JmmGbF4h2zuFbpN1XfIWcV0kLbBUgSXpR1QtW19vJFx44asnCrufRSvd69OItOFMEWgbVtoiWM2uDPUEUKcMQ==}
     dev: true
 
   /tweetnacl@0.14.5:

@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import {LineBasicMaterialParameters} from "three";
 
 export function findSize(object: THREE.Object3D, label?: string) {
 	const boundingBox = new THREE.Box3().setFromObject(object);
@@ -10,9 +11,11 @@ export function findSize(object: THREE.Object3D, label?: string) {
 	console.log(`${label ? label : "?"}: Width: ${width}, Height: ${height}, Depth: ${depth}`);
 }
 
-export function makeLineBetween(p1: THREE.Vector3, p2: THREE.Vector3): THREE.Line {
+export function makeLineBetween(p1: THREE.Vector3, p2: THREE.Vector3, parameters?: LineBasicMaterialParameters): THREE.Line {
 	const geometry = new THREE.BufferGeometry().setFromPoints([p1, p2]);
-	const material = new THREE.LineBasicMaterial({color: 0xff0000});
+	if (!parameters) parameters = {}
+	parameters.color = parameters.color ? parameters.color : 0xff0000;
+	const material = new THREE.LineBasicMaterial(parameters);
 	return new THREE.Line(geometry, material)
 }
 

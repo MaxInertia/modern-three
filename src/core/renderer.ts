@@ -38,9 +38,10 @@ renderer.toneMappingExposure = 1
 
 // Axes Helper
 const axesHelper = new AxesHelper()
+axesHelper.visible = false
 scene.add(axesHelper)
 
-gui.addInput(axesHelper, 'visible', {
+gui.addBinding(axesHelper, 'visible', {
 	label: 'AxesHelper',
 })
 

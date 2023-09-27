@@ -1,35 +1,26 @@
 import * as THREE from 'three'
-import {renderer, scene} from './core/renderer'
-import {fpsGraph, gui} from './core/gui'
-import camera from './core/camera'
-import {controls} from './core/orbit-control'
-import "./space/controls"
+import {renderer, scene, fpsGraph, gui, camera, controls, tickAnimations} from './core'
+import {combineLatest} from "rxjs";
+import {earth$, lineBetweenEarthAndMoon$, moon$} from "/@/space";
 
 import './style.css'
-
-// Shaders
-import {DISTANCE_SCALE, DISTANCE_TO_MOON} from "/@/space/planet";
-import {makeLineBetween} from "/@/utils";
-import {combineLatest} from "rxjs";
-import {earth$, moon$} from "/@/space/planets";
-
-const config = {
-	centerCameraOnMoon: false,
-}
+import {WebGLRenderer} from "three";
 
 scene.background = new THREE.Color(0, 0, 0)
 
 // Lights
 {
-	const ambientLight = new THREE.AmbientLight(0xffffff, 5)
+	const ambientLight = new THREE.AmbientLight(0xffffff, 0.25)
 	scene.add(ambientLight)
 	gui.addFolder({
 		title: 'Directional Light',
-	}).addInput(ambientLight, 'intensity')
+	}).addBinding(ambientLight, 'intensity')
 
-	const directionalLight = new THREE.DirectionalLight('#ffffff', 1)
+	const directionalLight = new THREE.DirectionalLight('#ffffff', 5)
 	directionalLight.castShadow = true
 	directionalLight.shadow.mapSize.set(1024, 1024)
+	//@ts-ignore
+	console.log("WebGLRenderer:", WebGLRenderer)
 	directionalLight.shadow.camera.far = 15
 	directionalLight.shadow.normalBias = 0.05
 	directionalLight.position.set(0.25, 2, 2.25)
@@ -39,71 +30,34 @@ scene.background = new THREE.Color(0, 0, 0)
 		title: 'Directional Light',
 	})
 	Object.keys(directionalLight.position).forEach(key => {
-		DirectionalLightFolder.addInput(
+		DirectionalLightFolder.addBinding(
 			directionalLight.position,
 			key as keyof THREE.Vector3,
 			{
-				min: -100,
-				max: 100,
-				step: 1,
+				min: -4,
+				max: 4,
+				step: 0.125,
 			},
 		)
 	})
 }
 
-
 combineLatest([earth$, moon$]).subscribe(([earth, moon]) => {
-	const dx = DISTANCE_TO_MOON * DISTANCE_SCALE
-	moon.position.set(earth.position.x + dx, earth.position.y, earth.position.z)
-
+	earth.castShadow = true
+	moon.castShadow = true
 	scene.add(earth)
 	scene.add(moon)
-
-	function setupCommonControls(bodyName: string, object: THREE.Group) {
-		// object.receiveShadow = true;
-		const folder = gui.addFolder({title: `${bodyName}`})
-		folder.addInput(object, 'scale')
-		folder.addInput(object, 'position')
-		return folder
-	}
-
-	setupCommonControls('Earth', earth)
-	const moonControls = setupCommonControls('Moon', moon)
-
-	const line = makeLineBetween(earth.position, moon.position)
-	scene.add(line)
-
-	gui.addInput(line, "visible", {
-		label: "Show line to moon"
-	})
-	moonControls.addInput(config, "centerCameraOnMoon", {
-		label: "Center camera on moon"
-	}).on('change', event => {
-		console.log("value:", event.value)
-		if (event.value) {
-			controls.target = moon.position;
-			camera.position.set(
-				moon.position.x + 80,
-				moon.position.y,
-				moon.position.z + 80,
-			)
-			camera.lookAt(moon.position)
-		} else {
-			controls.target = earth.position;
-			camera.position.set(
-				earth.position.x + 80,
-				earth.position.y,
-				earth.position.z + 80,
-			)
-			camera.lookAt(earth.position)
-		}
-	})
 })
 
-// const clock = new THREE.Clock()
+lineBetweenEarthAndMoon$.subscribe((line) => {
+	scene.add(line)
+})
+
+const clock = new THREE.Clock()
 
 const loop = () => {
-	// const elapsedTime = clock.getElapsedTime()
+	const elapsedTime = clock.getElapsedTime();
+	tickAnimations(elapsedTime)
 
 	fpsGraph.begin()
 
@@ -115,6 +69,5 @@ const loop = () => {
 }
 
 loop()
-console.log(scene)
 // @ts-ignore
 window.scene = scene
