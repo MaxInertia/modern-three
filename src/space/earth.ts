@@ -1,13 +1,13 @@
 import {fromPromise} from "rxjs/internal/observable/innerFrom";
 import {loadPlanet} from "/@/space/planet";
-import {map, shareReplay, take, tap} from "rxjs";
+import {map, shareReplay, tap} from "rxjs";
 import {makeLineBetween} from "/@/utils";
 import {makeAddRotationFunction, setupCommonControls} from "/@/space/util";
 import {OnPlanetLoadedFn, Planet, PlanetControlsFolder} from "/@/space/types";
 import * as THREE from "three";
 
 const earthOptions = {
-	addTilt: true,
+	addTilt: false,
 	rotate: false,
 }
 
@@ -31,7 +31,7 @@ export const earth$ = fromPromise(loadPlanet('earth')).pipe(
 
 export const {earthControls$, earthPositionControl$} = (() => {
 	const all$ = earth$.pipe(
-		take(1),
+		// take(1),
 		map((earth) => {
 			const earthControls = setupCommonControls('earth', earth);
 			const earthPositionControl = {
@@ -57,7 +57,7 @@ export const {earthControls$, earthPositionControl$} = (() => {
 				earthPositionControl,
 			}
 		}),
-		// shareReplay({refCount: true, bufferSize: 1})
+		shareReplay({refCount: true, bufferSize: 1})
 	)
 	return {
 		earthControls$: all$.pipe(map(v => v.earthControls)),
@@ -84,7 +84,11 @@ function showAxes(_earth: Planet, controls: PlanetControlsFolder) {
 	// Line extending through coordinates (0,0) is created by rotating Y by -Math.PI / 2
 	// (0,0), (0, 90), (0, -90), (0, 180)
 	for (let i = 0; i < 4; i++) {
-		const line = makeLineBetween(earth.position, referencePoint, {color: 0x00ff00})
+		let color = 0x00ff00
+		if (i == 3) {
+			color = 0xff0000
+		}
+		const line = makeLineBetween(earth.position, referencePoint, {color})
 		line.rotateY(i * Math.PI / 2)
 		axes.add(line)
 	}

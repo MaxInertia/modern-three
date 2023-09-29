@@ -5,12 +5,14 @@ import {earth$, lineBetweenEarthAndMoon$, moon$} from "/@/space";
 
 import './style.css'
 import {WebGLRenderer} from "three";
+import "/@/commands/add-pin-to-earth";
+import {addPinToEarth} from "/@/commands/add-pin-to-earth";
 
 scene.background = new THREE.Color(0, 0, 0)
 
 // Lights
 {
-	const ambientLight = new THREE.AmbientLight(0xffffff, 0.25)
+	const ambientLight = new THREE.AmbientLight(0xffffff, 4.25)
 	scene.add(ambientLight)
 	gui.addFolder({
 		title: 'Directional Light',
@@ -23,7 +25,7 @@ scene.background = new THREE.Color(0, 0, 0)
 	console.log("WebGLRenderer:", WebGLRenderer)
 	directionalLight.shadow.camera.far = 15
 	directionalLight.shadow.normalBias = 0.05
-	directionalLight.position.set(0.25, 2, 2.25)
+	directionalLight.position.set(-4.0, 0, -0.125)
 	scene.add(directionalLight)
 
 	const DirectionalLightFolder = gui.addFolder({
@@ -52,6 +54,8 @@ combineLatest([earth$, moon$]).subscribe(([earth, moon]) => {
 lineBetweenEarthAndMoon$.subscribe((line) => {
 	scene.add(line)
 })
+
+addPinToEarth()
 
 const clock = new THREE.Clock()
 

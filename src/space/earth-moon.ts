@@ -8,17 +8,20 @@ import {makeLineBetween} from "/@/utils";
 import {TpChangeEvent} from "@tweakpane/core";
 import * as THREE from "three";
 
+const showLineBetweenEarthAndMoonDefault = false
+
 const earthMoonOptions: {
 	centerCameraOn: "earth" | "moon"
 	distanceToScale: boolean,
 } = {
 	centerCameraOn: "earth",
-	distanceToScale: true,
+	distanceToScale: false,
 }
 
 export const lineBetweenEarthAndMoon$ = combineLatest([earth$, moon$]).pipe(
 	map(([earth, moon]) => {
 		const line = makeLineBetween(earth.position, moon.position)
+		line.visible = showLineBetweenEarthAndMoonDefault
 		gui.addBinding(line, "visible", {
 			label: "Show line to moon"
 		}).on('change', event => {
@@ -31,7 +34,10 @@ export const lineBetweenEarthAndMoon$ = combineLatest([earth$, moon$]).pipe(
 )
 
 combineLatest([earth$, moon$]).subscribe(([earth, moon]) => {
-	const dx = DISTANCE_TO_MOON * DISTANCE_SCALE
+	let dx = DISTANCE_TO_MOON * DISTANCE_SCALE
+	if (!earthMoonOptions.distanceToScale) {
+		dx /= 20
+	}
 	moon.position.set(earth.position.x + dx, earth.position.y, earth.position.z)
 	gui.refresh()
 })

@@ -22,6 +22,8 @@ const bodyToFilePath: Record<BodyInSpace, string> = {
 	"moon": 'Moon_1_3474.glb',
 }
 
+const wrapInGroup = true
+
 export interface GLTF {
 	scene: THREE.Group,
 	scenes: THREE.Group[],
@@ -48,16 +50,23 @@ export function loadPlanet(body: BodyInSpace) {
 				gltf.scene.castShadow = true
 				gltf.scene.receiveShadow = true
 				gltf.scene.traverse(function (node) {
+					// if (node instanceof THREE.Mesh) {
+					// 	console.log("found mesh", node)
+					// }
 					node.castShadow = true;
 					node.receiveShadow = true;
 				});
 
-				const object = new THREE.Group()
-				object.castShadow = true
-				object.receiveShadow = true
-				// object.scale.set(scale, scale, scale);
-				object.add(gltf.scene)
-
+				let object: THREE.Group
+				if (wrapInGroup) {
+					object = new THREE.Group()
+					object.castShadow = true
+					object.receiveShadow = true
+					// object.scale.set(scale, scale, scale);
+					object.add(gltf.scene)
+				} else {
+					object = gltf.scene
+				}
 				//@ts-ignore
 				window[body] = object
 
