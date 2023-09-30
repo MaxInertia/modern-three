@@ -1,9 +1,11 @@
 import * as THREE from 'three'
-import {renderer, scene, fpsGraph, gui, camera, controls, tickAnimations} from './core'
+import {renderer, scene, fpsGraph, gui, camera, tickAnimations, updateControls} from './core'
 import {combineLatest} from "rxjs";
 import {earth$, lineBetweenEarthAndMoon$, moon$} from "/@/space";
 
 import './style.css'
+import "/@/core/fly-controls";
+
 import "/@/commands/add-pin-to-earth";
 import {addPinToEarth} from "/@/commands/add-pin-to-earth";
 import {sun$} from "/@/space/sun";
@@ -44,12 +46,11 @@ addPinToEarth()
 const clock = new THREE.Clock()
 
 const loop = () => {
+	fpsGraph.begin()
 	const elapsedTime = clock.getElapsedTime();
 	tickAnimations(elapsedTime)
 
-	fpsGraph.begin()
-
-	controls.update()
+	updateControls()
 	renderer.render(scene, camera)
 
 	fpsGraph.end()

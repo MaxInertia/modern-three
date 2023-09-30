@@ -33,22 +33,25 @@ export const {earthControls$, earthPositionControl$} = (() => {
 	const all$ = earth$.pipe(
 		// take(1),
 		map((earth) => {
-			const earthControls = setupCommonControls('earth', earth);
+			const earthControls = setupCommonControls('Earth', earth);
 			const earthPositionControl = {
 				x: earthControls.addBinding(earth.position, 'x', {
 					min: -1000,
 					max: 1000,
 					step: 1,
+					hidden: true,
 				}),
 				y: earthControls.addBinding(earth.position, 'y', {
 					min: -1000,
 					max: 1000,
 					step: 1,
+					hidden: true,
 				}),
 				z: earthControls.addBinding(earth.position, 'z', {
 					min: -1000,
 					max: 1000,
 					step: 1,
+					hidden: true,
 				}),
 			}
 			onEarthControlsLoaded.forEach(fn => fn(earth, earthControls))

@@ -1,5 +1,5 @@
 import {combineLatest, map, shareReplay} from "rxjs";
-import {lookAt} from "/@/core/orbit-control";
+import {lookAt} from "/@/core/orbit-controls";
 import {gui} from "/@/core/gui";
 import {DISTANCE_SCALE, DISTANCE_TO_MOON} from "/@/space/planet";
 import {moon$, moonPositionControl$} from "/@/space/moon";
