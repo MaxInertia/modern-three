@@ -4,43 +4,23 @@ import {combineLatest} from "rxjs";
 import {earth$, lineBetweenEarthAndMoon$, moon$} from "/@/space";
 
 import './style.css'
-import {WebGLRenderer} from "three";
 import "/@/commands/add-pin-to-earth";
 import {addPinToEarth} from "/@/commands/add-pin-to-earth";
+import {sun$} from "/@/space/sun";
 
 scene.background = new THREE.Color(0, 0, 0)
 
 // Lights
 {
-	const ambientLight = new THREE.AmbientLight(0xffffff, 4.25)
+	const ambientLight = new THREE.AmbientLight(0xffffff, 0.45)
 	scene.add(ambientLight)
 	gui.addFolder({
-		title: 'Directional Light',
-	}).addBinding(ambientLight, 'intensity')
-
-	const directionalLight = new THREE.DirectionalLight('#ffffff', 5)
-	directionalLight.castShadow = true
-	directionalLight.shadow.mapSize.set(1024, 1024)
-	//@ts-ignore
-	console.log("WebGLRenderer:", WebGLRenderer)
-	directionalLight.shadow.camera.far = 15
-	directionalLight.shadow.normalBias = 0.05
-	directionalLight.position.set(-4.0, 0, -0.125)
-	scene.add(directionalLight)
-
-	const DirectionalLightFolder = gui.addFolder({
-		title: 'Directional Light',
-	})
-	Object.keys(directionalLight.position).forEach(key => {
-		DirectionalLightFolder.addBinding(
-			directionalLight.position,
-			key as keyof THREE.Vector3,
-			{
-				min: -4,
-				max: 4,
-				step: 0.125,
-			},
-		)
+		title: 'Ambient Light',
+	}).addBinding(ambientLight, 'intensity', {
+		label: 'intensity',
+		min: 0,
+		max: 4,
+		step: 0.05,
 	})
 }
 
@@ -49,6 +29,10 @@ combineLatest([earth$, moon$]).subscribe(([earth, moon]) => {
 	moon.castShadow = true
 	scene.add(earth)
 	scene.add(moon)
+})
+
+sun$.subscribe((sun) => {
+	scene.add(sun)
 })
 
 lineBetweenEarthAndMoon$.subscribe((line) => {

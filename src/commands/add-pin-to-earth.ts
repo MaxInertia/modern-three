@@ -61,7 +61,6 @@ export function addPinToEarth(
 
 		const zero = new THREE.Vector3(0, 0, 0)
 		const coords = latLonToVector3(latLong)
-		// let color = typeof options.color === 'string' ? parseInt(options.color) : options.color;
 		let color = options.color
 		const line = makeLineBetween(zero, coords, {color})
 		const sphere = makeSphere(4, {color})
